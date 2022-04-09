@@ -1,0 +1,30 @@
+Transition-state 1: phone = sil hmm-state = 0 pdf = 0
+ Transition-id = 1 p = 0.968 count of pdf = 125 [self-loop]
+ Transition-id = 2 p = 0.032 count of pdf = 125 [0 -> 1]
+Transition-state 2: phone = ao4 hmm-state = 0 pdf = 1
+ Transition-id = 3 p = 0.9875 count of pdf = 160 [self-loop]
+ Transition-id = 4 p = 0.0125 count of pdf = 160 [0 -> 1]
+Transition-state 3: phone = h hmm-state = 0 pdf = 2
+ Transition-id = 5 p = 0.955556 count of pdf = 45 [self-loop]
+ Transition-id = 6 p = 0.0444444 count of pdf = 45 [0 -> 1]
+Transition-state 4: phone = i3 hmm-state = 0 pdf = 3
+ Transition-id = 7 p = 0.978022 count of pdf = 91 [self-loop]
+ Transition-id = 8 p = 0.021978 count of pdf = 91 [0 -> 1]
+Transition-state 5: phone = i4 hmm-state = 0 pdf = 4
+ Transition-id = 9 p = 0.96875 count of pdf = 32 [self-loop]
+ Transition-id = 10 p = 0.03125 count of pdf = 32 [0 -> 1]
+Transition-state 6: phone = ian1 hmm-state = 0 pdf = 5
+ Transition-id = 11 p = 0.714286 count of pdf = 2 [self-loop]
+ Transition-id = 12 p = 0.285714 count of pdf = 2 [0 -> 1]
+Transition-state 7: phone = in1 hmm-state = 0 pdf = 6
+ Transition-id = 13 p = 0.983051 count of pdf = 118 [self-loop]
+ Transition-id = 14 p = 0.0169492 count of pdf = 118 [0 -> 1]
+Transition-state 8: phone = j hmm-state = 0 pdf = 7
+ Transition-id = 15 p = 0.931035 count of pdf = 58 [self-loop]
+ Transition-id = 16 p = 0.0689655 count of pdf = 58 [0 -> 1]
+Transition-state 9: phone = sh hmm-state = 0 pdf = 8
+ Transition-id = 17 p = 0.965517 count of pdf = 29 [self-loop]
+ Transition-id = 18 p = 0.0344828 count of pdf = 29 [0 -> 1]
+Transition-state 10: phone = t hmm-state = 0 pdf = 9
+ Transition-id = 19 p = 0.981818 count of pdf = 110 [self-loop]
+ Transition-id = 20 p = 0.0181818 count of pdf = 110 [0 -> 1]

@@ -1,0 +1,10 @@
+shared split sil
+shared split ao4
+shared split h
+shared split i3
+shared split i4
+shared split ian1
+shared split in1
+shared split j
+shared split sh
+shared split t
