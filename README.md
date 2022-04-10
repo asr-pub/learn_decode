@@ -2,7 +2,41 @@
 
 ### 背景知识
 
-语音识别中的解码使用的是令牌传递（ Token Passing） 实现的 Viterbi 算法，在解码图（HCLG）和声学特征的条件下，进行令牌传递。在实际使用中，解码图往往非常庞大，这时候需要在解码的过程中，进行剪枝操作，将得分比较低的 token 予以删除。每输入一帧声学特征，令牌就向所有可能的路径传递一次，当执行到最后一帧时，令牌传递结束，此时查看所有终止状态上的令牌，取最优的一个或多个令牌。
+语音识别中的解码使用的是令牌传递（ Token Passing） 实现的 Viterbi 算法，在给定解码图（HCLG）和声学特征的条件下，进行令牌传递。在实际使用中，解码图往往非常庞大，这时候需要在解码的过程中，进行剪枝操作，将得分比较低的 token 予以删除。每输入一帧声学特征，令牌就向所有可能的路径传递一次，当执行到最后一帧时，令牌传递结束，此时查看所有终止状态上的令牌，取最优的一个或多个令牌。
+
+在我提供的运行环境 [learn_decode](https://github.com/asr-pub/learn_decode) 中，将每个 phone 的状态数设置为 1，而且使用位置不相关的 phone，也就是说在准备 `lang` 目录的时候，传入了如下参数 `--position-dependent-phones false --num-nonsil-states 1 --num-sil-states 1 `，这样可以大大简化后面的解码图，方便我们查看最后生成的 HCLG.fst。
+
+`kaldi/egs/learn_decode/s5/exp/mono/graph/HCLG.jpg` 是最终生成的 HCLG 解码图，由一组节点和节点间的有向跳转（Transition）构成，其中每个跳转上保存了三种信息，输入标签（input label）、输出标签（output label）和权重（weight），以 `input_label:output_label/weight` 的格式记录。解码图需要有一个起始节点和至少一个终止节点，习惯上用粗圈表示起始节点，双圈表示终止节点。
+
+![Xnip2022-04-10_11-17-03](https://cdn.jsdelivr.net/gh/asr-pub/uPic@master/uPic/2022_04_10_11_21_Xnip2022-04-10_11-17-03.jpeg)
+
+input label 的数字表示 transition id，output label 的数字表示 word id，映射关系如下，transition-id 的 index 是从 1 开始的，因为 0 在 HCLG 中是专门为空标签  `<eps>` 保留的。从 transition-id 我们就可以知道其对应的 pdf id，从而使用与 pdf id 对应的 GMM 模型来计算声学得分。需要注意的是，从 transition-id 可以得到唯一的 pdf id，但是一个 pdf id 可能对应着多个 transition-id，这是因为在构建决策树时，由于数据的稀疏性，可能会有多个 tri-phone 共享相同的 pdf id。
+
+```shell
+# kaldi/egs/learn_decode/s5/exp/mono/final.txt
+# 部分 transition id
+Transition-state 1: phone = sil hmm-state = 0 pdf = 0
+ Transition-id = 1 p = 0.968 count of pdf = 125 [self-loop]
+ Transition-id = 2 p = 0.032 count of pdf = 125 [0 -> 1]
+Transition-state 2: phone = ao4 hmm-state = 0 pdf = 1
+ Transition-id = 3 p = 0.9875 count of pdf = 160 [self-loop]
+ Transition-id = 4 p = 0.0125 count of pdf = 160 [0 -> 1]
+Transition-state 3: phone = h hmm-state = 0 pdf = 2
+ Transition-id = 5 p = 0.955556 count of pdf = 45 [self-loop]
+ Transition-id = 6 p = 0.0444444 count of pdf = 45 [0 -> 1]
+
+# kaldi/egs/learn_decode/s5/data/lang/words.txt
+# word id
+<eps> 0
+<UNK> 1
+今天 2
+几 3
+号 4
+是 5
+#0 6
+<s> 7
+</s> 8
+```
 
 ### 编译运行
 
@@ -288,4 +322,6 @@ void SimpleDecoder::PruneToks(BaseFloat beam, unordered_map<StateId, Token*> *to
 [Kaldi中的decoder(一）- 基础和viterbi解码](http://placebokkk.github.io/kaldi/2019/07/31/asr-kaldi-decoder1.html)
 
 [token passing 算法动画](https://speech.zone/token-passing/)
+
+[Kaldi 语音识别实战](https://book.douban.com/subject/35020471/)
 
