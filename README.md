@@ -50,9 +50,13 @@ Transition-state 3: phone = h hmm-state = 0 pdf = 2
 
 ### 相关参数
 
-- prev_toks_: 数据类型是 dict，key 是 state，value 是 state 上面的 token，该 dict 存储上一帧的 <state, token>
+- token: 是 Token Passing 算法的核心数据结构来，在 HCLG 图上面，每个 state 上面至多存在一个 token，通过 token 可以回溯出完整的历史路径，其结构如下图所示
 
-- cur_toks_: 同上，该 dict 存储当前帧的 <state, token>
+![image-20220410165424810](https://cdn.jsdelivr.net/gh/asr-pub/uPic@master/uPic/2022_04_10_16_54_image-20220410165424810.png)
+
+- prev_toks_: 数据类型是 dict，key 是 state，value 是 state 上面的 token，该 dict 存储上一帧所有的 <state, token>
+
+- cur_toks_: 同上，该 dict 存储当前帧所有的 <state, token>
 - num_frames_ready: 含义是有多少帧数据可以提供给 decodable 对象使用，由于我们这边是非流式解码，直接输入所有的语音帧，所以 num_frames_ready     这里的值就是输入的音频帧数
 
 - num_frames_decoded_: 当前已解码的帧数，当 `num_frames_decoded_ >= num_frames_ready` 就停止解码
@@ -91,7 +95,6 @@ int main(int argc, char *argv[]) {
   // 读取 HCLG.fst 文件
   Fst<StdArc> *decode_fst = ReadFstKaldiGeneric(fst_in_filename);
   
-  BaseFloat tot_like = 0.0;
   // 解码的总帧数，比如有 10 条音频，每条音频 100 帧，那么 frame_count 最后的值为 1000
   kaldi::int64 frame_count = 0;
   // 解码成功、失败的音频数量
